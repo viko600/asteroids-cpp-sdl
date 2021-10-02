@@ -1,4 +1,5 @@
 #include "game.h"
+#include "TextureManager.h"
 
 Game::Game(){}
 
@@ -21,7 +22,8 @@ void Game::init(const char* title, bool fullScreen) {
             SDL_SetRenderDrawColor(_render, 0, 0, 0, 0);
         }
         isRunning = true;
-        ship = std::make_unique<Ship>(1, 1, 1, _render);
+
+        playerTex = TextureManager::LaodTexture("assets/ship.png", _render);
 
     }
     else {
@@ -46,11 +48,15 @@ void Game::handleEvents() {
 
 void Game::update() {
     
+    cnt++;
+    destR.h = 32;
+    destR.w = 32;
+    destR.x = cnt;
 }
 
 void Game::render() {
     SDL_RenderClear(_render);
-    // SDL_RenderCopy(_render, ship->gettexture(), NULL, &destR);
+    SDL_RenderCopy(_render, playerTex, NULL, &destR);
     SDL_RenderPresent(_render);
 }
 
@@ -71,3 +77,5 @@ SDL_Rect* Game::GetRect(SDL_Texture* const texture, const int x, const int y)
 	SDL_Rect* rect = new SDL_Rect{ x, y, w, h };
 	return rect;
 }
+
+SDL_Renderer* Game::defaultRender;

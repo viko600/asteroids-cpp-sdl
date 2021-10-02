@@ -30,5 +30,6 @@ void Ship::update(int dt) {
 }
 
 void Ship::draw() {
+    std::cout << "draw\n";
     SDL_RenderCopyEx(Game::defaultRender, _ship, NULL, _rect, angle, &center, SDL_FLIP_NONE); 
 }
