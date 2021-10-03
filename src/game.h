@@ -1,14 +1,12 @@
-#if !defined(GAME)
-#define GAME
+#pragma once
 
 #include "SDL2/SDL.h"
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include <memory>
 
-
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 640
 
 
 class Game {
@@ -30,12 +28,4 @@ public:
 private:
     bool isRunning;
     SDL_Window* _window;
-    SDL_Renderer* _render;
-    int cnt{0};
-    SDL_Texture* playerTex;
-    SDL_Rect srcR, destR;
 };
-
-
-
-#endif // GAME

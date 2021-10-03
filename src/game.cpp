@@ -1,5 +1,11 @@
 #include "game.h"
 #include "TextureManager.h"
+#include "GameObject.h"
+
+
+std::unique_ptr<GameObject> player;
+std::unique_ptr<GameObject> enamy;
+std::unique_ptr<GameObject> background;
 
 Game::Game(){}
 
@@ -16,15 +22,16 @@ void Game::init(const char* title, bool fullScreen) {
             std::cout << "Window creaed" << std::endl;
         }
 
-        _render = SDL_CreateRenderer(_window, -1, 0);
-        if(_render){
+        defaultRender = SDL_CreateRenderer(_window, -1, 0);
+        if(defaultRender){
             std::cout << "rendered" << std::endl;
-            SDL_SetRenderDrawColor(_render, 0, 0, 0, 0);
+            SDL_SetRenderDrawColor(defaultRender, 0, 0, 0, 0);
         }
         isRunning = true;
 
-        playerTex = TextureManager::LaodTexture("assets/ship.png", _render);
-
+        background = std::make_unique<GameObject>("assets/space.png", 0, 0, 800, 640);
+        background->Update();
+        player = std::make_unique<GameObject>("assets/ship.png", 0, 0, 32, 32);
     }
     else {
         isRunning = false;
@@ -47,22 +54,19 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-    
-    cnt++;
-    destR.h = 32;
-    destR.w = 32;
-    destR.x = cnt;
+    player->Update();
 }
 
 void Game::render() {
-    SDL_RenderClear(_render);
-    SDL_RenderCopy(_render, playerTex, NULL, &destR);
-    SDL_RenderPresent(_render);
+    SDL_RenderClear(defaultRender);
+    background->Render();
+    player->Render();
+    SDL_RenderPresent(defaultRender);
 }
 
 void Game::clean() {
     SDL_DestroyWindow(_window);
-    SDL_DestroyRenderer(_render);
+    SDL_DestroyRenderer(defaultRender);
     SDL_Quit();
     std::cout << "Game closed" << std::endl;
 } 
@@ -78,4 +82,4 @@ SDL_Rect* Game::GetRect(SDL_Texture* const texture, const int x, const int y)
 	return rect;
 }
 
-SDL_Renderer* Game::defaultRender;
+SDL_Renderer* Game::defaultRender = nullptr;
