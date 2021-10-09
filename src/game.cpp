@@ -1,11 +1,16 @@
 #include "game.h"
 #include "TextureManager.h"
 #include "GameObject.h"
+#include "ECS.h"
+#include "Components.h"
 
 
 std::unique_ptr<GameObject> player;
 std::unique_ptr<GameObject> enamy;
 std::unique_ptr<GameObject> background;
+
+Manager manager;
+auto& newPlayer(manager.addNewEntity());
 
 Game::Game(){}
 
@@ -32,6 +37,9 @@ void Game::init(const char* title, bool fullScreen) {
         background = std::make_unique<GameObject>("assets/space.png", 0, 0, 800, 640);
         background->Update();
         player = std::make_unique<GameObject>("assets/ship.png", 0, 0, 32, 32);
+
+        newPlayer.addComponent<PositionComponent>();
+
     }
     else {
         isRunning = false;
@@ -55,6 +63,8 @@ void Game::handleEvents() {
 
 void Game::update() {
     player->Update();
+    manager.update();
+
 }
 
 void Game::render() {
