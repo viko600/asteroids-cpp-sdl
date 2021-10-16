@@ -8,3 +8,7 @@ SDL_Texture* TextureManager::LaodTexture(const char* fileName)
 
     return tex;
 }
+
+void TextureManager::Draw(SDL_Texture *tex, SDL_Rect srcRec, SDL_Rect destRect, double angle, SDL_Point *center, SDL_RendererFlip flip){
+    SDL_RenderCopyEx(Game::defaultRender, tex, NULL, &destRect, angle, center, flip);
+}

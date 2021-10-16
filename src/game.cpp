@@ -1,16 +1,15 @@
 #include "game.h"
 #include "TextureManager.h"
-#include "GameObject.h"
-#include "ECS.h"
 #include "Components.h"
+#include "GameObject.h"
 
 
-std::unique_ptr<GameObject> player;
-std::unique_ptr<GameObject> enamy;
 std::unique_ptr<GameObject> background;
 
 Manager manager;
 auto& newPlayer(manager.addNewEntity());
+
+SDL_Event Game::event;
 
 Game::Game(){}
 
@@ -36,9 +35,10 @@ void Game::init(const char* title, bool fullScreen) {
 
         background = std::make_unique<GameObject>("assets/space.png", 0, 0, 800, 640);
         background->Update();
-        player = std::make_unique<GameObject>("assets/ship.png", 0, 0, 32, 32);
 
         newPlayer.addComponent<PositionComponent>();
+        newPlayer.addComponent<SpriteComponent>("assets/ship.png");
+        newPlayer.addComponent<KeyboardControler>();
 
     }
     else {
@@ -47,7 +47,7 @@ void Game::init(const char* title, bool fullScreen) {
 }
 
 void Game::handleEvents() {
-    SDL_Event event;
+    
     SDL_PollEvent(&event);
     switch (event.type)
     {
@@ -62,15 +62,13 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-    player->Update();
     manager.update();
-
 }
 
 void Game::render() {
     SDL_RenderClear(defaultRender);
     background->Render();
-    player->Render();
+    manager.draw();
     SDL_RenderPresent(defaultRender);
 }
 

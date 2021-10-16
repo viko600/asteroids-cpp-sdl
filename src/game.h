@@ -22,6 +22,7 @@ public:
 
     bool running();
 
+    static SDL_Event event;
     static SDL_Rect* GetRect(SDL_Texture* const texture, const int x, const int y);
     static SDL_Renderer* defaultRender;
 
