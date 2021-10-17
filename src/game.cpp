@@ -40,6 +40,7 @@ void Game::init(const char* title, bool fullScreen) {
         newPlayer.addComponent<SpriteComponent>("assets/ship.png");
         newPlayer.addComponent<KeyboardControler>();
 
+
     }
     else {
         isRunning = false;

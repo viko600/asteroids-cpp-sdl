@@ -20,14 +20,11 @@ public:
             case SDLK_w :
                 position->velocity.y = -1;
                 break;
-            case SDLK_s:
-                position->velocity.y = 1;
-                break;
             case SDLK_a:
-                position->velocity.x = -1;
+                position->angle -= 3;
                 break;
             case SDLK_d:
-                position->velocity.x = 1;
+                position->angle += 3;
                 break;
             default:
                 break;
@@ -39,18 +36,13 @@ public:
             case SDLK_w :
                 position->velocity.y = 0;
                 break;
-            case SDLK_s:
-                position->velocity.y = 0;
-                break;
-            case SDLK_a:
-                position->velocity.x = 0;
-                break;
-            case SDLK_d:
-                position->velocity.x = 0;
-                break;
             default:
                 break;
             }
+        }
+        if (SDL_MOUSEMOTION){
+            std::cout << Game::event.motion.x << std::endl;
+            std::cout << Game::event.motion.y << std::endl;
         }
     }
 
