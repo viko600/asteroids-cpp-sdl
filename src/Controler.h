@@ -1,8 +1,11 @@
 #pragma once
 
+#include <cmath>
 #include "game.h"
 #include "ECS.h"
 #include "Components.h"
+
+#define PI 3.14159
 
 class KeyboardControler : public Component
 {
@@ -18,13 +21,15 @@ public:
             switch (Game::event.key.keysym.sym)
             {
             case SDLK_w :
-                position->velocity.y = -1;
+                position->velocity.x = sin(position->angle*PI/180);
+                position->velocity.y = -cos(position->angle*PI/180);
+                std::cout << "Positio angle is: " << position->angle << std::endl;
                 break;
             case SDLK_a:
-                position->angle -= 3;
+                position->angle -= 5.0f;
                 break;
             case SDLK_d:
-                position->angle += 3;
+                position->angle += 5.0f;
                 break;
             default:
                 break;
@@ -34,15 +39,12 @@ public:
             switch (Game::event.key.keysym.sym)
             {
             case SDLK_w :
+                position->velocity.x = 0;
                 position->velocity.y = 0;
                 break;
             default:
                 break;
             }
-        }
-        if (SDL_MOUSEMOTION){
-            std::cout << Game::event.motion.x << std::endl;
-            std::cout << Game::event.motion.y << std::endl;
         }
     }
 

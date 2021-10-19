@@ -4,6 +4,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include <memory>
+#include "ECS.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 640
@@ -22,6 +23,7 @@ public:
 
     bool running();
 
+    static Manager manager;
     static SDL_Event event;
     static SDL_Rect* GetRect(SDL_Texture* const texture, const int x, const int y);
     static SDL_Renderer* defaultRender;

@@ -5,7 +5,6 @@
 class PositionComponent : public Component
 {
 private:
-    int speed{3};
     SDL_Point *center = NULL;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
@@ -15,7 +14,8 @@ public:
     int heigh{32};
     int width{32};
     int scale{1};
-    double angle{0};
+    float angle{0};
+    int speed{3};
 
     PositionComponent(){
         position.x = 0;
@@ -50,8 +50,6 @@ public:
         if (position.x < 0) position.x = SCREEN_WIDTH;
         if (position.y > SCREEN_HEIGHT) position.y = 0;
         if (position.y < 0) position.y = SCREEN_HEIGHT;
-        if (angle > 360) angle = 1;
-        if (angle < 0) angle = 359;
     }
 
     void setPosition(int x, int y) {

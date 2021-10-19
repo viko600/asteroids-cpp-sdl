@@ -2,12 +2,16 @@
 #include "TextureManager.h"
 #include "Components.h"
 #include "GameObject.h"
+#include "Asteroids.h"
 
 
 std::unique_ptr<GameObject> background;
 
-Manager manager;
-auto& newPlayer(manager.addNewEntity());
+Manager Game::manager;
+
+auto& newPlayer(Game::manager.addNewEntity());
+
+Asteroids a;
 
 SDL_Event Game::event;
 
@@ -36,10 +40,12 @@ void Game::init(const char* title, bool fullScreen) {
         background = std::make_unique<GameObject>("assets/space.png", 0, 0, 800, 640);
         background->Update();
 
-        newPlayer.addComponent<PositionComponent>();
+        newPlayer.addComponent<PositionComponent>(SCREEN_HEIGHT/2, SCREEN_WIDTH/2 , 32, 32, 1);
         newPlayer.addComponent<SpriteComponent>("assets/ship.png");
         newPlayer.addComponent<KeyboardControler>();
 
+
+        a.init();
 
     }
     else {
@@ -63,13 +69,15 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-    manager.update();
+    Game::manager.update();
+    a.update();
 }
 
 void Game::render() {
     SDL_RenderClear(defaultRender);
     background->Render();
-    manager.draw();
+    Game::manager.draw();
+    a.draw();
     SDL_RenderPresent(defaultRender);
 }
 
