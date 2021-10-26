@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "Components.h"
 #include "GameObject.h"
+#include "Collision.h"
 #include "Asteroids.h"
 
 
@@ -42,7 +43,9 @@ void Game::init(const char* title, bool fullScreen) {
 
         newPlayer.addComponent<PositionComponent>(SCREEN_HEIGHT/2, SCREEN_WIDTH/2 , 32, 32, 1);
         newPlayer.addComponent<SpriteComponent>("assets/ship.png");
+        newPlayer.addComponent<ShotComponent>("shot");
         newPlayer.addComponent<KeyboardControler>();
+        newPlayer.addComponent<ColisionComponent>("ship");
 
 
         a.init();
@@ -71,6 +74,12 @@ void Game::handleEvents() {
 void Game::update() {
     Game::manager.update();
     a.update();
+    for (auto& ast : a.asteroids){
+        if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, newPlayer.getComponent<ColisionComponent>().collider)){
+            std::cout << "Ship Hit!!!" << std::endl;
+        }
+    }
+
 }
 
 void Game::render() {

@@ -23,13 +23,15 @@ public:
             case SDLK_w :
                 position->velocity.x = sin(position->angle*PI/180);
                 position->velocity.y = -cos(position->angle*PI/180);
-                std::cout << "Positio angle is: " << position->angle << std::endl;
                 break;
             case SDLK_a:
                 position->angle -= 5.0f;
                 break;
             case SDLK_d:
                 position->angle += 5.0f;
+                break;
+            case SDLK_SPACE:
+                entity->getComponent<ShotComponent>().init();
                 break;
             default:
                 break;
@@ -48,5 +50,4 @@ public:
         }
     }
 
-private:
 };

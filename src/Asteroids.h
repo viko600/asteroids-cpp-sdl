@@ -1,15 +1,14 @@
 #pragma once
 #include <chrono>
-#include "ECS.h"
+#include "Components.h"
 
 
-class Asteroids
+class Asteroids : public Component
 {
 public:
     Asteroids();
-    void init();
-    void draw();
-    void update();
-private:
+    void init() override;
+    void draw() override;
+    void update() override;
     std::vector<Entity> asteroids;
 };

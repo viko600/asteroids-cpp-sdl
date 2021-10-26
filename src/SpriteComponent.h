@@ -24,7 +24,6 @@ public:
         destRec.x = position->position.x;
         destRec.y = position->position.y;
         destRec.w = destRec.h = position->heigh * position->scale;
-        std::cout << destRec.x << " " << destRec.y << std::endl;
 
     };
     void update() override {

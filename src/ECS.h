@@ -58,7 +58,7 @@ public:
     void destroy() { active = false; };
 
     template <typename T> bool hasComponent(){
-        return bitset[getComponentId<T>];
+        return bitset[getComponentId<T>()];
     }
 
     template <typename T, typename... TArgs>
@@ -102,6 +102,13 @@ public:
             }
         ), std::end(entities));
     };
+
+    template <typename T> bool collision() {
+        for(auto& ent : entities){
+            std::cout << ent->getComponent<T>().tag << std::endl;
+        }
+        return true;
+    }
 
     Entity& addNewEntity(){
         Entity* e = new Entity();
