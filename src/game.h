@@ -8,6 +8,7 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 640
+#define PI 3.14159
 
 
 class Game {

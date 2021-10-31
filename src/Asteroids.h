@@ -10,5 +10,8 @@ public:
     void init() override;
     void draw() override;
     void update() override;
+    void destroy(Entity &asteroid);
     std::vector<Entity> asteroids;
+private:
+    void spawnNew();
 };

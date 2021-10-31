@@ -7,7 +7,7 @@ Asteroids::Asteroids(){
 }
 
 void Asteroids::init() {
-    asteroids[0].addComponent<PositionComponent>(100,100,32,32,2);
+    asteroids[0].addComponent<PositionComponent>(100,100,32,32,1);
     asteroids[0].addComponent<SpriteComponent>("assets/asteroid2.png");
     asteroids[0].addComponent<ColisionComponent>("asteroid");
     asteroids[0].getComponent<PositionComponent>().velocity.x = 1;
@@ -25,4 +25,9 @@ void Asteroids::update() {
     for (auto& i : asteroids){
         i.update();
     }
+}
+
+void Asteroids::destroy(Entity &asteroid) {
+    if (asteroid.getComponent<PositionComponent>().scale < 2) asteroid.destroy();
+
 }

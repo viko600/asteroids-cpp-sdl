@@ -43,7 +43,7 @@ void Game::init(const char* title, bool fullScreen) {
 
         newPlayer.addComponent<PositionComponent>(SCREEN_HEIGHT/2, SCREEN_WIDTH/2 , 32, 32, 1);
         newPlayer.addComponent<SpriteComponent>("assets/ship.png");
-        newPlayer.addComponent<ShotComponent>("shot");
+        newPlayer.addComponent<ShotComponent>();
         newPlayer.addComponent<KeyboardControler>();
         newPlayer.addComponent<ColisionComponent>("ship");
 
@@ -77,6 +77,11 @@ void Game::update() {
     for (auto& ast : a.asteroids){
         if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, newPlayer.getComponent<ColisionComponent>().collider)){
             std::cout << "Ship Hit!!!" << std::endl;
+        }
+        for (auto& shot : newPlayer.getComponent<ShotComponent>().shots){
+            if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, shot)){
+                a.destroy(ast);
+            }
         }
     }
 

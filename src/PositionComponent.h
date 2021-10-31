@@ -1,6 +1,7 @@
 #pragma once
 #include "Components.h"
 #include "Vector.h"
+#include "game.h"
 
 class PositionComponent : public Component
 {

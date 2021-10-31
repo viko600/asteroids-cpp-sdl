@@ -2,18 +2,19 @@
 
 #include <cmath>
 #include "game.h"
-#include "ECS.h"
+// #include "ECS.h"
 #include "Components.h"
 
-#define PI 3.14159
 
 class KeyboardControler : public Component
 {
 public:
     PositionComponent *position;
+    ShotComponent *shots;
 
     void init() override {
         position = &entity->getComponent<PositionComponent>();
+        shots = &entity->getComponent<ShotComponent>();
     }
 
     void update() override {
@@ -31,7 +32,7 @@ public:
                 position->angle += 5.0f;
                 break;
             case SDLK_SPACE:
-                entity->getComponent<ShotComponent>().init();
+                shots->fire(position->position.x, position->position.y, position->angle);
                 break;
             default:
                 break;
