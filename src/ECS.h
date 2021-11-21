@@ -110,6 +110,10 @@ public:
         return true;
     }
 
+    void destroy(Entity *entity) {
+        entity->destroy();
+    }
+
     Entity& addNewEntity(){
         Entity* e = new Entity();
         std::unique_ptr<Entity> ePtr { e };

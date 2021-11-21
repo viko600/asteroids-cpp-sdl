@@ -2,7 +2,6 @@
 
 #include <cmath>
 #include "game.h"
-// #include "ECS.h"
 #include "Components.h"
 
 

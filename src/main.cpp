@@ -13,7 +13,7 @@ int main()
     game->init("Asteroids", false);
     while (game->running()){
         frameStart = SDL_GetTicks();
-        game->handleEvents();
+        // game->handleEvents();
         game->update();
         game->render();
 

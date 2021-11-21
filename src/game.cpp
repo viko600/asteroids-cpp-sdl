@@ -9,6 +9,7 @@
 std::unique_ptr<GameObject> background;
 
 Manager Game::manager;
+Manager Game::asteroids;
 
 auto& newPlayer(Game::manager.addNewEntity());
 
@@ -72,11 +73,13 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
+    handleEvents();
     Game::manager.update();
     a.update();
     for (auto& ast : a.asteroids){
         if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, newPlayer.getComponent<ColisionComponent>().collider)){
             std::cout << "Ship Hit!!!" << std::endl;
+            Game::manager.destroy(&newPlayer);
         }
         for (auto& shot : newPlayer.getComponent<ShotComponent>().shots){
             if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, shot)){
@@ -84,7 +87,7 @@ void Game::update() {
             }
         }
     }
-
+    manager.refresh();
 }
 
 void Game::render() {

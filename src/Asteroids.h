@@ -10,8 +10,11 @@ public:
     void init() override;
     void draw() override;
     void update() override;
+    void refresh();
     void destroy(Entity &asteroid);
     std::vector<Entity> asteroids;
 private:
+    std::chrono::system_clock::time_point start, next;
     void spawnNew();
+    int randomNumber(int min, int max);
 };

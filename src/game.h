@@ -24,7 +24,7 @@ public:
 
     bool running();
 
-    static Manager manager;
+    static Manager manager, asteroids;
     static SDL_Event event;
     static SDL_Rect* GetRect(SDL_Texture* const texture, const int x, const int y);
     static SDL_Renderer* defaultRender;
