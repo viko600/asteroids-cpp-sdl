@@ -1,14 +1,14 @@
-#if !defined(GAME)
-#define GAME
+#pragma once
 
 #include "SDL2/SDL.h"
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <memory>
+#include "ECS.h"
 
-#include "ship.h"
-
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 640
+#define PI 3.14159
 
 
 class Game {
@@ -24,16 +24,12 @@ public:
 
     bool running();
 
+    static Manager manager, asteroids;
+    static SDL_Event event;
     static SDL_Rect* GetRect(SDL_Texture* const texture, const int x, const int y);
     static SDL_Renderer* defaultRender;
 
 private:
     bool isRunning;
     SDL_Window* _window;
-    SDL_Renderer* _render;
-    std::unique_ptr<Ship> ship;
 };
-
-
-
-#endif // GAME

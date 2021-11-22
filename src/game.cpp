@@ -1,4 +1,21 @@
 #include "game.h"
+#include "TextureManager.h"
+#include "Components.h"
+#include "GameObject.h"
+#include "Collision.h"
+#include "Asteroids.h"
+
+
+std::unique_ptr<GameObject> background;
+
+Manager Game::manager;
+Manager Game::asteroids;
+
+auto& newPlayer(Game::manager.addNewEntity());
+
+Asteroids a;
+
+SDL_Event Game::event;
 
 Game::Game(){}
 
@@ -15,13 +32,24 @@ void Game::init(const char* title, bool fullScreen) {
             std::cout << "Window creaed" << std::endl;
         }
 
-        _render = SDL_CreateRenderer(_window, -1, 0);
-        if(_render){
+        defaultRender = SDL_CreateRenderer(_window, -1, 0);
+        if(defaultRender){
             std::cout << "rendered" << std::endl;
-            SDL_SetRenderDrawColor(_render, 0, 0, 0, 0);
+            SDL_SetRenderDrawColor(defaultRender, 0, 0, 0, 0);
         }
         isRunning = true;
-        ship = std::make_unique<Ship>(1, 1, 1, _render);
+
+        background = std::make_unique<GameObject>("assets/space.png", 0, 0, 800, 640);
+        background->Update();
+
+        newPlayer.addComponent<PositionComponent>(SCREEN_HEIGHT/2, SCREEN_WIDTH/2 , 32, 32, 1);
+        newPlayer.addComponent<SpriteComponent>("assets/ship.png");
+        newPlayer.addComponent<ShotComponent>();
+        newPlayer.addComponent<KeyboardControler>();
+        newPlayer.addComponent<ColisionComponent>("ship");
+
+
+        a.init();
 
     }
     else {
@@ -30,7 +58,7 @@ void Game::init(const char* title, bool fullScreen) {
 }
 
 void Game::handleEvents() {
-    SDL_Event event;
+    
     SDL_PollEvent(&event);
     switch (event.type)
     {
@@ -45,18 +73,36 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-    
+    handleEvents();
+    Game::manager.update();
+    a.update();
+    manager.refresh();
+    for (auto& ast : a.asteroids){
+        if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, newPlayer.getComponent<ColisionComponent>().collider)){
+            Game::manager.destroy(&newPlayer);
+            clean();
+            break;
+        }
+        for (auto& shot : newPlayer.getComponent<ShotComponent>().shots){
+            if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, shot)){
+                a.destroy(ast);
+                break;
+            }
+        }
+    }
 }
 
 void Game::render() {
-    SDL_RenderClear(_render);
-    // SDL_RenderCopy(_render, ship->gettexture(), NULL, &destR);
-    SDL_RenderPresent(_render);
+    SDL_RenderClear(defaultRender);
+    background->Render();
+    Game::manager.draw();
+    a.draw();
+    SDL_RenderPresent(defaultRender);
 }
 
 void Game::clean() {
     SDL_DestroyWindow(_window);
-    SDL_DestroyRenderer(_render);
+    SDL_DestroyRenderer(defaultRender);
     SDL_Quit();
     std::cout << "Game closed" << std::endl;
 } 
@@ -71,3 +117,5 @@ SDL_Rect* Game::GetRect(SDL_Texture* const texture, const int x, const int y)
 	SDL_Rect* rect = new SDL_Rect{ x, y, w, h };
 	return rect;
 }
+
+SDL_Renderer* Game::defaultRender = nullptr;
