@@ -16,5 +16,7 @@ public:
 private:
     std::chrono::system_clock::time_point start, next;
     void spawnNew();
+    void spawnNewOnPosition(float x, float y, int size);
     int randomNumber(int min, int max);
+    float randomFloat(float min, float max);
 };

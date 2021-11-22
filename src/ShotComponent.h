@@ -25,8 +25,8 @@ public:
     }
     void update() override {
         for (size_t i = 0; i < shots.size(); i++) {
-            shots[i].x += sin(angles[i] * PI/180) * 3;
-            shots[i].y += -cos(angles[i] * PI/180) * 3;
+            shots[i].x += sin(angles[i] * PI/180) * 6;
+            shots[i].y += -cos(angles[i] * PI/180) * 6;
             if (shots[i].x < 0 || 
             shots[i].x > SCREEN_WIDTH ||
             shots[i].y < 0 ||
@@ -42,8 +42,8 @@ public:
             TextureManager::Draw(tex, srcR, shots[i], angles[i], center, flip);
         }
     }
-    void destroy() {
-        SDL_DestroyTexture(tex);
+    void destroy(SDL_Rect &shot) {
+        shots.erase(&shot);
     }
 
     std::vector<SDL_Rect> shots;

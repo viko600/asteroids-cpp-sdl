@@ -25,10 +25,10 @@ public:
                 position->velocity.y = -cos(position->angle*PI/180);
                 break;
             case SDLK_a:
-                position->angle -= 5.0f;
+                position->angle -= 6.0f;
                 break;
             case SDLK_d:
-                position->angle += 5.0f;
+                position->angle += 6.0f;
                 break;
             case SDLK_SPACE:
                 shots->fire(position->position.x, position->position.y, position->angle);
@@ -41,8 +41,10 @@ public:
             switch (Game::event.key.keysym.sym)
             {
             case SDLK_w :
-                position->velocity.x = 0;
-                position->velocity.y = 0;
+                if (position->velocity.x < 0) position->velocity.x = 0;
+                else position->velocity.x -= position->velocity.x*0.3;
+                if (position->velocity.y < 0) position->velocity.y = 0;
+                else position->velocity.y -= position->velocity.y*0.3;
                 break;
             default:
                 break;

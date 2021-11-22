@@ -1,19 +1,9 @@
 #include "game.h"
 #include "Asteroids.h"
 
-Asteroids::Asteroids(){
-    // auto& ast(Game::manager.addNewEntity());
-    // asteroids.emplace_back(std::move(ast));
-}
+Asteroids::Asteroids(){}
 
 void Asteroids::init() {
-    // asteroids[0].addComponent<PositionComponent>(100,100,32,32,1);
-    // asteroids[0].addComponent<SpriteComponent>("assets/asteroid2.png");
-    // asteroids[0].addComponent<ColisionComponent>("asteroid");
-    // asteroids[0].getComponent<PositionComponent>().velocity.x = 1;
-    // asteroids[0].getComponent<PositionComponent>().velocity.y = 0.13;
-    // next = std::chrono::system_clock::now() + std::chrono::seconds(3);
-
     spawnNew();
 }
 
@@ -28,6 +18,10 @@ void Asteroids::update() {
         i.update();
     }
     refresh();
+    start = std::chrono::system_clock::now();
+    if (start > next) {
+        spawnNew();
+    }
 }
 
 void Asteroids::refresh() {
@@ -41,26 +35,58 @@ void Asteroids::refresh() {
 }
 
 void Asteroids::destroy(Entity &asteroid) {
-    if (asteroid.getComponent<PositionComponent>().scale < 2) asteroid.destroy();
+    if (asteroid.getComponent<PositionComponent>().scale > 1) {
+        spawnNewOnPosition(
+            asteroid.getComponent<PositionComponent>().position.x,
+            asteroid.getComponent<PositionComponent>().position.y,
+            asteroid.getComponent<PositionComponent>().scale - 1
+        );
+        // spawnNewOnPosition(
+        //     asteroid.getComponent<PositionComponent>().position.x,
+        //     asteroid.getComponent<PositionComponent>().position.y,
+        //     asteroid.getComponent<PositionComponent>().scale - 1
+        // );
 
+    }
+    asteroid.destroy();
 }
 
 void Asteroids::spawnNew() {
     auto& ast(Game::manager.addNewEntity());
     asteroids.emplace_back(std::move(ast));
     asteroids.back().addComponent<PositionComponent>(
-        randomNumber(0, SCREEN_HEIGHT),
-        randomNumber(0, SCREEN_WIDTH)
+        randomFloat(0, SCREEN_HEIGHT),
+        (float)randomNumber(0, SCREEN_WIDTH)
         ,32,32,
-        randomNumber(1, 3));
+        (int)randomFloat(1, 3));
     asteroids.back().addComponent<SpriteComponent>("assets/asteroid2.png");
     asteroids.back().addComponent<ColisionComponent>("asteroid");
-    asteroids.back().getComponent<PositionComponent>().velocity.x = 1;
-    asteroids.back().getComponent<PositionComponent>().velocity.y = 0.13;
+    asteroids.back().getComponent<PositionComponent>().velocity.x = randomFloat(-1.0, 1.0);
+    asteroids.back().getComponent<PositionComponent>().velocity.y = randomFloat(-1.0, 1.0);
     next = std::chrono::system_clock::now() + std::chrono::seconds(3);
 
 }
 
+void Asteroids::spawnNewOnPosition(float x, float y, int size) {
+    auto& ast(Game::manager.addNewEntity());
+    asteroids.emplace_back(std::move(ast));
+    asteroids.back().addComponent<PositionComponent>(
+        x,
+        y,
+        32,32,
+        size);
+    asteroids.back().addComponent<SpriteComponent>("assets/asteroid2.png");
+    asteroids.back().addComponent<ColisionComponent>("asteroid");
+    asteroids.back().getComponent<PositionComponent>().velocity.x = randomFloat(-1.0, 1.0);
+    asteroids.back().getComponent<PositionComponent>().velocity.y = randomFloat(-1.0, 1.0);
+}
+
 int Asteroids::randomNumber(int min, int max){
-    return rand()%(max-min+1)+min;
+    int random = rand()%(max-min+1)+min;
+    if (random > 10) return SCREEN_WIDTH;
+    return 0;
+}
+
+float Asteroids::randomFloat(float min, float max){
+    return (min + 1) + (((float) rand()) / (float) RAND_MAX) * (max - (min + 1)); 
 }

@@ -76,18 +76,20 @@ void Game::update() {
     handleEvents();
     Game::manager.update();
     a.update();
+    manager.refresh();
     for (auto& ast : a.asteroids){
         if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, newPlayer.getComponent<ColisionComponent>().collider)){
-            std::cout << "Ship Hit!!!" << std::endl;
             Game::manager.destroy(&newPlayer);
+            clean();
+            break;
         }
         for (auto& shot : newPlayer.getComponent<ShotComponent>().shots){
             if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, shot)){
                 a.destroy(ast);
+                break;
             }
         }
     }
-    manager.refresh();
 }
 
 void Game::render() {
