@@ -15,3 +15,9 @@ Build the game
 
 Run the game
 `./game`
+
+## TO DO
+- Fix the ship movement
+- Fix the asteroid animations
+- Add sound
+- Add start menu and end menu
