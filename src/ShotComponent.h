@@ -42,9 +42,6 @@ public:
             TextureManager::Draw(tex, srcR, shots[i], angles[i], center, flip);
         }
     }
-    void destroy(SDL_Rect &shot) {
-        shots.erase(&shot);
-    }
 
     std::vector<SDL_Rect> shots;
     std::vector<double> angles;
