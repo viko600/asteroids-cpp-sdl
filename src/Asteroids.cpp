@@ -35,19 +35,14 @@ void Asteroids::refresh() {
 }
 
 void Asteroids::destroy(Entity &asteroid) {
-    if (asteroid.getComponent<PositionComponent>().scale > 1) {
-        spawnNewOnPosition(
-            asteroid.getComponent<PositionComponent>().position.x,
-            asteroid.getComponent<PositionComponent>().position.y,
-            asteroid.getComponent<PositionComponent>().scale - 1
-        );
-        // spawnNewOnPosition(
-        //     asteroid.getComponent<PositionComponent>().position.x,
-        //     asteroid.getComponent<PositionComponent>().position.y,
-        //     asteroid.getComponent<PositionComponent>().scale - 1
-        // );
+    // if (asteroid.getComponent<PositionComponent>().scale > 1) {
+    //     spawnNewOnPosition(
+    //         asteroid.getComponent<PositionComponent>().position.x,
+    //         asteroid.getComponent<PositionComponent>().position.y,
+    //         asteroid.getComponent<PositionComponent>().scale - 1
+    //     );
 
-    }
+    // }
     asteroid.destroy();
 }
 
@@ -56,9 +51,11 @@ void Asteroids::spawnNew() {
     asteroids.emplace_back(std::move(ast));
     asteroids.back().addComponent<PositionComponent>(
         randomFloat(0, SCREEN_HEIGHT),
-        (float)randomNumber(0, SCREEN_WIDTH)
+        randomFloat(0, SCREEN_WIDTH)
         ,32,32,
-        (int)randomFloat(1, 3));
+        (int)randomFloat(1, 3),
+        randomFloat(0, 360));
+    asteroids.back().getComponent<PositionComponent>().tag = "asteroid";
     asteroids.back().addComponent<SpriteComponent>("assets/asteroid2.png");
     asteroids.back().addComponent<ColisionComponent>("asteroid");
     asteroids.back().getComponent<PositionComponent>().velocity.x = randomFloat(-1.0, 1.0);
@@ -74,7 +71,8 @@ void Asteroids::spawnNewOnPosition(float x, float y, int size) {
         x,
         y,
         32,32,
-        size);
+        size,
+        randomFloat(0, 360));
     asteroids.back().addComponent<SpriteComponent>("assets/asteroid2.png");
     asteroids.back().addComponent<ColisionComponent>("asteroid");
     asteroids.back().getComponent<PositionComponent>().velocity.x = randomFloat(-1.0, 1.0);

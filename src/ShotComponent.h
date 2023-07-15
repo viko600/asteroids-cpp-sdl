@@ -5,6 +5,7 @@
 #include "game.h"
 #include "Components.h"
 #include <algorithm>
+#include <chrono>
 
 
 class ShotComponent : public Component
@@ -12,16 +13,22 @@ class ShotComponent : public Component
 public:
     ShotComponent() {
         tex = TextureManager::LaodTexture("assets/bullet.png");
+        start = std::chrono::system_clock::now();
+        next = std::chrono::system_clock::now();
     }
 
     void fire(int x, int y, double angle) {
-        SDL_Rect shot;
-        shot.w = 32;
-        shot.h = 32;
-        shot.x = x;
-        shot.y = y;
-        shots.push_back(shot);
-        angles.push_back(angle);
+        start = std::chrono::system_clock::now();
+        if (start > next) {
+            SDL_Rect shot;
+            shot.w = 32;
+            shot.h = 32;
+            shot.x = x;
+            shot.y = y;
+            shots.push_back(shot);
+            angles.push_back(angle);
+            next = std::chrono::system_clock::now() + std::chrono::seconds(1);
+        }
     }
     void update() override {
         for (size_t i = 0; i < shots.size(); i++) {
@@ -51,5 +58,6 @@ private:
     SDL_Rect srcR;
     SDL_Point *center = NULL;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
+    std::chrono::system_clock::time_point start, next;
 
 };

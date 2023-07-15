@@ -1,19 +1,15 @@
 #include "game.h"
 #include "TextureManager.h"
 #include "Components.h"
-#include "GameObject.h"
 #include "Collision.h"
 #include "Asteroids.h"
 
-
-std::unique_ptr<GameObject> background;
-
 Manager Game::manager;
-Manager Game::asteroids;
 
+auto& background(Game::manager.addNewEntity());
 auto& newPlayer(Game::manager.addNewEntity());
+Asteroids asteroid;
 
-Asteroids a;
 
 SDL_Event Game::event;
 
@@ -39,17 +35,17 @@ void Game::init(const char* title, bool fullScreen) {
         }
         isRunning = true;
 
-        background = std::make_unique<GameObject>("assets/space.png", 0, 0, 800, 640);
-        background->Update();
+        background.addComponent<PositionComponent>(0, 0, 800, 640, 1, 0);
+        background.addComponent<SpriteComponent>("assets/space.png");
 
-        newPlayer.addComponent<PositionComponent>(SCREEN_HEIGHT/2, SCREEN_WIDTH/2 , 32, 32, 1);
+        newPlayer.addComponent<PositionComponent>(SCREEN_HEIGHT/2, SCREEN_WIDTH/2 , 32, 32, 1, 0);
         newPlayer.addComponent<SpriteComponent>("assets/ship.png");
         newPlayer.addComponent<ShotComponent>();
         newPlayer.addComponent<KeyboardControler>();
         newPlayer.addComponent<ColisionComponent>("ship");
 
+        asteroid.init();
 
-        a.init();
 
     }
     else {
@@ -75,9 +71,9 @@ void Game::handleEvents() {
 void Game::update() {
     handleEvents();
     Game::manager.update();
-    a.update();
     manager.refresh();
-    for (auto& ast : a.asteroids){
+    asteroid.update();
+    for (auto& ast : asteroid.asteroids){
         if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, newPlayer.getComponent<ColisionComponent>().collider)){
             Game::manager.destroy(&newPlayer);
             clean();
@@ -85,7 +81,7 @@ void Game::update() {
         }
         for (auto& shot : newPlayer.getComponent<ShotComponent>().shots){
             if(Collision::AABB(ast.getComponent<ColisionComponent>().collider, shot)){
-                a.destroy(ast);
+                asteroid.destroy(ast);
                 break;
             }
         }
@@ -94,9 +90,8 @@ void Game::update() {
 
 void Game::render() {
     SDL_RenderClear(defaultRender);
-    background->Render();
     Game::manager.draw();
-    a.draw();
+    asteroid.draw();
     SDL_RenderPresent(defaultRender);
 }
 
